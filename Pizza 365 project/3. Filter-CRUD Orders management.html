@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Test Front-end Orders management</title>
+        <meta charset="utf-8">
+        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <!-- Data Table-->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+        <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+    </head>
+    <body>
+        <div class="container ">
+            <h2 style="text-align: center;">Orders List</h2>
+            <div class="container jumbotron py-3">
+                <div class="row form-group text-center">
+                    <label class="col-sm-2 col-form-label">Order status</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" id="select-order-status">s
+                            <option value="all">All</option>
+                            <option value="open">Open</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="cancel">Cancel</option>
+                        </select>
+                    </div>
+                    <label class="col-sm-2 col-form-label">Pizza Type</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" id="select-pizza-type">
+                            <option value="all">All</option>
+                            <option value="Hawaii">Hawaii</option>
+                            <option value="Bacon">Thịt hun khói</option>
+                            <option value="Seafood">Hải sản</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <button id="btn-filter" class="btn btn-primary">Filter</button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button id="btn-add-order" class="btn btn-success">+ Add new order</button>
+            </div>
+            <table class="table table-bordered table-striped table-hover" id="table-order">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Combo Size</th>
+                        <th>Pizza Type</th>
+                        <th>Drink</th>
+                        <th>Price</th>
+                        <th>Full name</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!--Modal confirm / cancel order status update-->
+        <div class="modal fade" id="modal-detail" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header  text-center">
+                        <h3 class="modal-title">Order Details</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">ID</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-id" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Order Code</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-order-id" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Size</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select id="select-size" type="text" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Diameters</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-diameters" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Ribs</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-ribs" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Salad</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-salad" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Pizza Type</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select id="select-type"  class="form-control">
+                                    <option value="Hawaii">Hawaii</option>
+                                    <option value="Bacon">Thịt hun khói</option>
+                                    <option value="Seafood">Hải sản</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Voucher Id</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-voucher-id" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Price</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-price" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Discount</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-discount" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Drink</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select id="select-drink" type="select" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Number of drinks</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-number-drink" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Fullname</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-name" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Email</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-email" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Phone number</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-phone" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Address</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-address" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Message</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-message" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Order date</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-order-date" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Updated date</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-updated-date" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <button class="col-sm-12 btn btn-warning" id="btn-confirm">Confirm</button>
+                            </div>
+                            <div class="col-sm-6">
+                                <button class="col-sm-12 btn btn-danger" id="btn-cancel">Cancel</button>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div> 
+        
+        <!--Modal insert new order-->
+        <div class="modal fade" id="modal-insert" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header  text-center">
+                        <h3 class="modal-title">Add new Order</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                                                  
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Size</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select id="select-size-add" type="text" class="form-control">
+                                    <option class="form-control" value="">Choose Size</option>
+                                </select>
+                            </div>
+                        </div> 
+                        
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Diameters</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-diameters-add" type="text" class="form-control">
+                            </div>
+                        </div>                         
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Ribs</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-ribs-add" type="text" class="form-control">
+                            </div>
+                        </div>                         
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Salad</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-salad-add" type="text" class="form-control">
+                            </div>
+                        </div>                         
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Number of drinks</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-number-drink-add" type="text" class="form-control">
+                            </div>
+                        </div>                         
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Price</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-price-add" type="text" class="form-control">
+                            </div>
+                        </div>                         
+                        
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Pizza Type</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select id="select-type-add" type="text" class="form-control">
+                                    <option value="Hawaii">Hawaii</option>
+                                    <option value="Bacon">Thịt hun khói</option>
+                                    <option value="Seafood">Hải sản</option>                          
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Voucher Id</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-voucher-id-add" type="text" class="form-control">
+                            </div>
+                        </div>                            
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Drink</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select id="select-drink-add" type="select" class="form-control"></select>
+                            </div>
+                        </div>                          
+                        
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Fullname</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-name-add" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Email</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-email-add" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Phone number</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-phone-add" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Address</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-address-add" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="">Message</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="inp-message-add" type="text" class="form-control">
+                            </div>
+                        </div>                            
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <button class="col-sm-12 btn btn-warning" id="btn-insert">Insert</button>
+                            </div>
+                            <div class="col-sm-6">
+                                <button class="col-sm-12 btn btn-danger" data-dismiss="modal" id="btn-close">Close</button>
+                            </div>
+                        </div>                       
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal confirm delete order -->
+        <div id="modal-confirm-delete" class="modal fade " tabindex="-1" role="dialog">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header text-center">                        
+                        <h4 class="modal-title w-100">Are you sure?</h4>	
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Do you really want to delete these records? This process cannot be undone.</p>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button id="btn-delete-order" type="button" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>     
+    </body>
+    <script>
+        "use strict";
+        $(document).ready(function(){
+            /*** REGION 1 - Global variable */
+            
+            var gObjectRequest = {
+                    kichCo: "",
+                    duongKinh: "",
+                    suon: "",
+                    salad: "",
+                    loaiPizza: "",
+                    idVourcher: "",
+                    idLoaiNuocUong: "",
+                    soLuongNuoc: "",
+                    hoTen: "",
+                    thanhTien: "",
+                    email: "",
+                    soDienThoai: "",
+                    diaChi: "",
+                    loiNhan: ""
+                } ;
+            var gDataOrders = [];
+            var gId = "";
+            var gOrderCode = "";
+            var gPizzaSize = ["S","M","L"];
+
+            const gORDER = ["id", "kichCo", "loaiPizza", "idLoaiNuocUong", "thanhTien", "hoTen", "soDienThoai", "trangThai", "action"];
+            
+            // Declare columns of datatable
+            const gCOL_ORDER_ID = 0;
+            const gCOL_SIZE = 1;
+            const gCOL_TYPE = 2;
+            const gCOL_DRINK = 3;
+            const gCOL_PRICE = 4;
+            const gCOL_NAME = 5;
+            const gCOL_PHONE = 6;
+            const gCOL_STATUS = 7;
+            const gCOL_ACTION = 8;
+            
+            // Define table - without data
+            $("#table-order").DataTable({
+                columns: [
+                    {data: gORDER[gCOL_ORDER_ID]},
+                    {data: gORDER[gCOL_SIZE]},
+                    {data: gORDER[gCOL_TYPE]},
+                    {data: gORDER[gCOL_DRINK]},
+                    {data: gORDER[gCOL_PRICE]},
+                    {data: gORDER[gCOL_NAME]},
+                    {data: gORDER[gCOL_PHONE]},
+                    {data: gORDER[gCOL_STATUS]},
+                    {data: gORDER[gCOL_ACTION]},
+                ],
+                // define content of action column, create detail button
+                columnDefs: [
+                    {
+                        targets: gCOL_ACTION,
+                        defaultContent: `<i class='fas fa-edit icon-edit'></i>
+                                         <i class='fas fa-trash-alt icon-delete'></i>`
+                    }
+                ]
+            });
+
+            /*** REGION 2 - Assign functions execute events for elements */
+            onPageLoading();
+            getDrinkList();
+            getPizzaSizeList(gPizzaSize);
+
+            // Assign event handler for edit icons
+            $("#table-order").on("click", ".icon-edit", function(){
+                onIconEditClick(this);
+            });
+            // Assign event handler for confirm button in modal form
+            $("#btn-confirm").on("click",function() {
+                onBtnConfirmClick();
+            });
+            // Assign event handler for cancel button in modal form
+            $("#btn-cancel").on("click", function() {
+                onBtnCancelClick();
+            });
+
+            // Assign event handler for delete icons
+            $("#table-order").on("click", ".icon-delete", function() {
+                onIconDeleteClick(this);
+            })
+
+            $("#btn-delete-order").on("click", onBtnDeleteOrderClick); // in delete confirm modal
+
+            // Assign event handler for filter button
+            $("#btn-filter").on("click", function(){
+                onBtnFilterClick();
+            });
+
+            
+            // Assign event handler for button add new order
+            $("#btn-add-order").on("click", onBtnAddOrderClick);
+
+            $("#btn-insert").on("click", onBtnInsertClick);
+
+            $("#select-size-add").on("change", function(){
+                    fillComboDetailNewOrder($("#select-size-add").val());
+                    $("#inp-diameters-add").val(gObjectRequest.duongKinh + " cm");
+                    $("#inp-ribs-add").val(gObjectRequest.suon + " pieces");
+                    $("#inp-salad-add").val(gObjectRequest.salad + " gram");
+                    $("#inp-number-drink-add").val(gObjectRequest.soLuongNuoc);
+                    $("#inp-price-add").val(gObjectRequest.thanhTien + " VND");
+                });
+            /*** REGION 3 - Event handlers- declare functions solving events */
+
+            // Function executed when loading page
+            function onPageLoading() {
+                // get data from server
+                $.ajax({
+                    url: "http://203.171.20.210:8080/devcamp-pizza365/orders",
+                    type: "GET",
+                    dataType: 'json',
+                    success: function(paramRes){
+                        gDataOrders = paramRes;
+                        console.log(gDataOrders);
+                        loadDataToTable(paramRes);
+                    },
+                    error: function(paramError) {
+                        console.log(paramError.responseText);
+                    }
+                })
+            }
+
+            // function executed when filter button is clicked
+            function onBtnFilterClick() {
+                //debugger;
+                "use strict"
+                var vStatus = $("#select-order-status").val();
+                var vType = $("#select-pizza-type").val();
+                var vDataFilter = gDataOrders.filter(function(paramOrder, index) {
+
+                    if (vType != "all" && paramOrder.loaiPizza == null) return false;
+
+                   return (vStatus === "all" || vStatus.toUpperCase() === paramOrder.trangThai.toUpperCase())
+                   && (vType === "all" || vType.toUpperCase() === paramOrder.loaiPizza.toUpperCase());
+                });
+                loadDataToTable(vDataFilter);
+            }
+
+            // function for button add new order
+            function onBtnAddOrderClick() {
+                $("#modal-insert").modal("show");
+                
+            }
+
+            // function for insert button in modal add new
+            function onBtnInsertClick() {
+                //debugger;
+                
+
+                getDataNewOrderModal(gObjectRequest);
+                if(validateDataNewOrder(gObjectRequest)) {
+                    insertNewOrderByAjax(gObjectRequest);
+                }   
+            }
+
+            // function when edit button is clicked
+             function onIconEditClick(paramElement) {
+                var vRowSelected = $(paramElement).closest('tr');
+                var vTable = $("#table-order").DataTable();
+                var vDataRow = vTable.row(vRowSelected).data();
+                gId = vDataRow.id;
+                gOrderCode = vDataRow.orderCode;
+                console.log("Id: " + gId);
+                console.log("Order code: " + gOrderCode);
+
+                getOrderDetailByAjax(gOrderCode);
+                $("#modal-detail").modal("show");
+            }
+
+            // function executed when confirm button in modal is clicked
+            function onBtnConfirmClick() {
+                //debugger;
+                
+                var vId = readId();//S0: Read data in form
+                if(validateDataInModal()) { //S1: Validate data
+                    updateOrderByAjax(vId, "confirmed"); //S2: call api update data
+                }
+            }
+
+            // function executed when confirm button in modal is clicked
+            function onBtnCancelClick() {
+                var vId = readId();//S0: Read data in form
+                if(vId != "") { //S1: Validate data
+                    updateOrderByAjax(vId, "cancel"); //S2: call api update data
+                }
+            }
+
+            // function when icon delete is clicked
+            function onIconDeleteClick(paramElement) {
+                var vRowSelected = $(paramElement).closest('tr');
+                var vTable = $("#table-order").DataTable();
+                var vDataRow = vTable.row(vRowSelected).data();
+                gId = vDataRow.id;
+                $("#modal-confirm-delete").modal("show");
+            }
+
+            // function for button delete in confirmation modal
+            function onBtnDeleteOrderClick() {
+                $.ajax({
+                    url: "http://203.171.20.210:8080/devcamp-pizza365/orders/" + gId,
+                    type: "DELETE",
+                    success: function(res) {
+                        alert ("Order deleted");
+                        location.reload();
+                    },
+                    error: function(error) {
+                        alert(error.responseText);
+                    }
+                });
+            }
+
+            /*** REGION 4 - Common used functions */
+
+            // function get data from form modal
+            function getDataNewOrderModal(paramObj) {
+
+                paramObj.kichCo = $("#select-size-add").val();               
+                
+                paramObj.loaiPizza = $("#select-type-add").val();
+                paramObj.idVourcher = $("#inp-voucher-id-add").val();                
+                paramObj.idLoaiNuocUong = $("#select-drink-add").val();
+            
+                paramObj.hoTen = $("#inp-name-add").val();
+                paramObj.email = $("#inp-email-add").val();
+                paramObj.soDienThoai = $("#inp-phone-add").val();
+                paramObj.diaChi = $("#inp-address-add").val();
+                paramObj.loiNhan = $("#inp-message-add").val();               
+            }
+
+            // function to fill combo detail of new order
+            function fillComboDetailNewOrder(paramSize) {
+
+                switch(paramSize) {
+
+                    case "S": 
+                    gObjectRequest.duongKinh = 20;
+                    gObjectRequest.suon = 2;
+                    gObjectRequest.salad = 200;
+                    gObjectRequest.soLuongNuoc = 2;
+                    gObjectRequest.thanhTien = 150;
+                    break;
+
+                    case "M":
+                    gObjectRequest.duongKinh = 25;
+                    gObjectRequest.suon = 4;
+                    gObjectRequest.salad = 300;
+                    gObjectRequest.soLuongNuoc = 3;
+                    gObjectRequest.thanhTien = 200;
+                    break;
+
+                    case "L":
+                    gObjectRequest.duongKinh = 30;
+                    gObjectRequest.suon = 8;
+                    gObjectRequest.salad = 500;
+                    gObjectRequest.soLuongNuoc = 4;
+                    gObjectRequest.thanhTien = 250;
+                    break;
+                }
+            }    
+
+            // function to validate date in modal: add new order
+            function validateDataNewOrder(paramObj) {
+
+                if(paramObj.kichCo == "") {
+                    alert("Choose pizza size");
+                    return false;
+                }
+
+                if(paramObj.loaiPizza == "") {
+                    alert ("Choose pizza type!");
+                    return false;
+                }
+                if(paramObj.hoTen == "") {
+                    alert ("Input fullname!");
+                    return false;
+                }
+                if(paramObj.soDienThoai == "") {
+                    alert ("Input phone number!");
+                    return false;
+                }
+                if(isNaN(paramObj.soDienThoai)) {
+                    alert("Phone number is incorrect");
+                    return false;
+                }
+                if(paramObj.diaChi == "") {
+                    alert ("Input address!");
+                    return false;
+                }
+                validateEmail(paramObj.email);
+                return true;
+            }
+
+            // function to validate email
+            function validateEmail (paramEmail) {
+                const vREG = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return vREG.test(String(paramEmail).toLowerCase());
+            }
+
+            // function to insert new order by ajax
+            function insertNewOrderByAjax (paramObj) {
+                $.ajax({
+                    url: "http://203.171.20.210:8080/devcamp-pizza365/orders",
+                    type: "POST",
+                    data: JSON.stringify(paramObj),
+                    contentType: "application/json;charset=UTF-8",
+                    success: function(res) {
+                        console.log(res);
+                        alert("Order created! ");
+                        location.reload();
+                    },
+                    error: function(error) {
+                        console.log(error.responseText);
+                    }
+                });
+            }
+
+            //function to read Id in modal
+            function readId(){
+                var vId = $.trim($("#inp-id").val());
+                return vId;
+            }
+
+            function IsInputValueExists(inputID)
+            {
+                if($.trim( $(inputID).val()) == "") return false;
+
+                return true;
+            }
+
+            // function to validate Data in modal
+            function validateDataInModal() {
+               // debugger;
+
+                if (!IsInputValueExists("#inp-id")) return false;
+                if (!IsInputValueExists("#inp-order-id")) return false;
+                if (!IsInputValueExists("#select-size")) return false;
+                if (!IsInputValueExists("#inp-ribs")) return false;
+                if (!IsInputValueExists("#select-type")) return false;
+                if (!IsInputValueExists("#select-drink")) return false;
+                if (!IsInputValueExists("#inp-name")) return false;
+                if (!IsInputValueExists("#inp-phone")) return false;
+                if (!IsInputValueExists("#inp-diameters")) return false;
+                if (!IsInputValueExists("#inp-salad")) return false;
+                if (!IsInputValueExists("#inp-price")) return false;
+                if (!IsInputValueExists("#inp-order-date")) return false;
+                if (!IsInputValueExists("#inp-number-drink")) return false;
+                if (!IsInputValueExists("#inp-updated-date")) return false;
+
+                return true;
+            }
+
+             // function to get order detail from server when button detail is clicked
+             function getOrderDetailByAjax(paramOrderId) {
+                $.ajax({
+                    url: "http://203.171.20.210:8080/devcamp-pizza365/orders/" + paramOrderId,
+                    type: "GET",
+                    dataType: 'json',
+                    success: function (paramRes){
+                        handleOrderDetail(paramRes);
+                        console.log(paramRes);
+                    },
+                    error: function (paramError) {
+                        console.log(paramError.responseText);
+                    }
+                });
+            }
+
+            // function to update order by ajax : confirmed
+            function updateOrderByAjax(paramId, paramStatus) {
+                //debugger;
+                var vObjRequest = {
+                    trangThai: paramStatus
+                };
+                $.ajax({
+                    url: "http://203.171.20.210:8080/devcamp-pizza365/orders/" + paramId,
+                    type: "PUT",
+                    data: JSON.stringify(vObjRequest),
+                    contentType: "application/json;charset=UTF-8",
+                    success: function(paramRes) {
+                        alert("Order updated!");
+                        location.reload();
+                    },
+                    error: function(paramError){
+                        console.log(paramError.responseText);
+                    }
+                });
+            }
+
+            // funtion to load data to table
+            function loadDataToTable(paramObj) {
+                var vTable = $("#table-order").DataTable();
+                vTable.clear(); // clear previous data
+                vTable.rows.add(paramObj); // update data for table
+                vTable.draw(); // update interface for table
+            }
+
+           
+
+            // function to process order details from server
+            function handleOrderDetail(paramObj) {
+
+                $("#inp-id").val(paramObj.id);
+                $("#inp-order-id").val(paramObj.orderCode);
+                $("#select-size").val(paramObj.kichCo);
+                $("#inp-diameters").val(paramObj.duongKinh);
+
+                $("#inp-ribs").val(paramObj.suon);
+                $("#inp-salad").val(paramObj.salad);
+                $("#select-type").val(paramObj.loaiPizza);
+                $("#inp-voucher-id").val(paramObj.idVourcher);
+
+                $("#inp-price").val(paramObj.thanhTien);
+                $("#inp-discount").val(paramObj.giamGia);
+                $("#select-drink").val(paramObj.idLoaiNuocUong);
+                $("#inp-number-drink").val(paramObj.soLuongNuoc);
+
+                $("#inp-name").val(paramObj.hoTen);
+                $("#inp-email").val(paramObj.email);
+                $("#inp-phone").val(paramObj.soDienThoai);
+                $("#inp-address").val(paramObj.diaChi);
+                $("#inp-message").val(paramObj.loiNhan);
+
+                $("#inp-order-date").val(paramObj.ngayTao);
+                $("#inp-updated-date").val(paramObj.ngayCapNhat);
+            }
+
+            // function to call api get drink list
+            function getDrinkList() {
+                $.ajax({
+                    url: "http://203.171.20.210:8080/devcamp-pizza365/drinks",
+                    type: "GET",
+                    dataType: 'json',
+                    success: function(paramRes){
+                        handleDrinkList(paramRes);
+                    },
+                    error: function(paramError) {
+                        console.log(paramError.responseText)
+                    }
+                });
+            }
+
+            // function to create options for select element in Drink
+            function handleDrinkList(paramObjDrink) {
+                $.each(paramObjDrink, function(i,item){
+                    $("#select-drink").append($('<option>',{
+                        text: item.tenNuocUong,
+                        value: item.maNuocUong
+                    }));
+                    $("#select-drink-add").append($('<option>',{
+                        text: item.tenNuocUong,
+                        value: item.maNuocUong
+                    }));
+                });
+            }
+
+            // function to create options for select element in Pizza Size in filter
+            function getPizzaSizeList(paramPizza) {
+                $.each(paramPizza, function(i, item){
+                    $("#select-size").append($('<option>',{
+                        text: item,
+                        value: item
+                    }));
+                    $("#select-size-add").append($('<option>',{
+                        text: item,
+                        value: item
+                    }));
+                });
+            } 
+    });
+    </script>
+
+</html>
+
+

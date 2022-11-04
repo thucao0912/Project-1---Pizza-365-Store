@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title>Danh sách đơn hành</title>
+    <!-- Import them style bootstrap cho datatable -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+</head>
+<body>
+    <div class="jumbotron">
+        <h2 class="text-center"> DANH SÁCH ĐƠN HÀNG</h2>
+    <table id="table" class="table text-center table-striped">
+        <thead>
+            <tr>
+              <th scope="col">Order ID</th>
+              <th scope="col">Kich co Combo</th>
+              <th scope="col">Loại Pizza</th>
+              <th scope="col">Nước uống</th>
+              <th scope="col">Thành tiền</th>
+              <th scope="col">Họ và tên</th>
+              <th scope="col">SĐT</th>
+              <th scope="col">Trạng thái</th>
+              <th scope="col">Chi tiết</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+    </table>
+    </div>
+
+<script>
+    $(document).ready(function() {
+        const gDATA_COLUMN = [
+        "orderCode",
+        "kichCo",
+        "loaiPizza",
+        "idLoaiNuocUong",
+        "thanhTien",
+        "hoTen",
+        "soDienThoai",
+        "trangThai",
+        "chiTiet",
+        ];
+        const gORDER_CODE_COL = 0;
+        const gKICH_C0_COL = 1;
+        const gLOAI_PIZZA_COL = 2;
+        const gNUOC_UONG_COL = 3;
+        const gTHANH_TIEN_COL = 4;
+        const gHO_VA_TEN_COL = 5;
+        const gSDT_COL = 6;
+        const gTRANG_THAI_COL = 7;
+        const gCHI_TIET_COL = 8;
+
+        $("#table").DataTable({
+            columns: [
+            {data: gDATA_COLUMN[gORDER_CODE_COL]},
+            {data: gDATA_COLUMN[gKICH_C0_COL]},
+            {data: gDATA_COLUMN[gLOAI_PIZZA_COL]},
+            {data: gDATA_COLUMN[gNUOC_UONG_COL]},
+            {data: gDATA_COLUMN[gTHANH_TIEN_COL]},
+            {data: gDATA_COLUMN[gHO_VA_TEN_COL]},
+            {data: gDATA_COLUMN[gSDT_COL]},
+            {data: gDATA_COLUMN[gTRANG_THAI_COL]},
+            {data: gDATA_COLUMN[gCHI_TIET_COL]},
+            ],
+            columnDefs:[
+            {
+                targets : gCHI_TIET_COL,
+                className: "text-center",
+                defaultContent:"<button class= 'btn btn-success btn-detail'>Chi tiết</button>"
+            }
+            ]
+        });
+
+     /*** REGION 2 - Vùng gán / thực thi hàm xử lý sự kiện cho các elements */
+        onPageLoading();
+        $(document).on("click","#table .btn-detail", function(){
+            onBtnDetailClick(this);
+        });
+
+    /*** REGION 3 - Event handlers - Vùng khai báo các hàm xử lý sự kiện */
+    function onPageLoading() {
+      "use strict";
+      $.ajax({
+        type: "GET",
+        url: "http://203.171.20.210:8080/devcamp-pizza365/orders",
+        dataType: "json",
+        success: function (paramObj) {
+          //debugger;
+          console.log(paramObj);
+          loadDataToTable(paramObj);
+        },
+        error: function (ajaxContext){
+          alert(ajaxContext,responseText)
+        }
+      });
+    }
+    function onBtnDetailClick(paramElement){
+      "use strict";
+        var vRowClick = $(paramElement).parents("tr");
+        var vTable = $("#table").DataTable();
+        var vDataRow = vTable.row(vRowClick).data();
+        console.log("%c OrderCode: " + vDataRow.orderCode, "color:blue");
+        console.log("%c Kích cỡ Combo: " + vDataRow.kichCo, "color:blue");
+        console.log("%c Loại Pizza: " + vDataRow.loaiPizza, "color:blue");
+        console.log("%c Nước uống: " + vDataRow.idLoaiNuocUong, "color:blue");
+        console.log("%c Thành tiền: " + vDataRow.thanhTien, "color:blue");
+        console.log("%c Họ và tên: " + vDataRow.hoTen, "color:blue");
+        console.log("%c Số điện thoại: " + vDataRow.soDienThoai, "color:blue");
+        console.log("%c Trạng thái: " + vDataRow.trangThai, "color:blue");
+        var vID = vDataRow.id;
+        var vOrderCode = vDataRow.orderCode;
+        const vURL_DETAIL_FORM = "Order-detail.html";
+        var vUrlOpen = vURL_DETAIL_FORM + "?orderCode=" + vOrderCode + "&id=" + vID;
+        window.location.href = vUrlOpen;
+    }
+    /*** REGION 4 - Common funtions - Vùng khai báo hàm dùng chung trong toàn bộ chương trình*/
+    function loadDataToTable(paramObj){
+      var vTable = $("#table").DataTable();
+      vTable.clear();
+      vTable.rows.add(paramObj);
+      vTable.draw();
+    }
+    });
+</script>
+</body>
+</html>
