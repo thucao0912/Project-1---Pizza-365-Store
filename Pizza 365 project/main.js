@@ -265,17 +265,17 @@ function onBtnPizzaSizeLargeClick() {
 
 function changeColorButtonPizza(paramPizza) {
     if (paramPizza == "Small") {
-      $("#btn-pizza-small").removeClass().addClass("btn btn-success w-100");
-      $("#btn-pizza-medium").removeClass().addClass("btn btn-orange w-100");
-      $("#btn-pizza-large").removeClass().addClass("btn btn-orange w-100");
+      $("#btn-size-s").removeClass().addClass("btn btn-success w-100");
+      $("#btn-size-m").removeClass().addClass("btn btn-orange w-100");
+      $("#btn-size-l").removeClass().addClass("btn btn-orange w-100");
     } else if (paramPizza == "Medium") {
-      $("#btn-pizza-small").removeClass().addClass("btn btn-orange w-100");
-      $("#btn-pizza-medium").removeClass().addClass("btn btn-success w-100");
-      $("#btn-pizza-large").removeClass().addClass("btn btn-orange w-100");
+      $("#btn-size-s").removeClass().addClass("btn btn-orange w-100");
+      $("#btn-size-m").removeClass().addClass("btn btn-success w-100");
+      $("#btn-size-l").removeClass().addClass("btn btn-orange w-100");
     } else if (paramPizza == "Large") {
-      $("#btn-pizza-small").removeClass().addClass("btn btn-orange w-100");
-      $("#btn-pizza-medium").removeClass().addClass("btn btn-orange w-100");
-      $("#btn-pizza-large").removeClass().addClass("btn btn-success w-100");
+      $("#btn-size-s").removeClass().addClass("btn btn-orange w-100");
+      $("#btn-size-m").removeClass().addClass("btn btn-orange w-100");
+      $("#btn-size-l").removeClass().addClass("btn btn-success w-100");
     } else if (paramPizza == "Ocean") {
       $("#btn-type-ocean").removeClass().addClass("btn btn-success w-100");
       $("#btn-type-hawaii").removeClass().addClass("btn btn-orange w-100");
